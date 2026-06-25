@@ -49,24 +49,21 @@
 
         header {
             text-align: center;
-            padding: 40px 20px 30px;
-        }
-
-        .logo-area {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-        }
-
-        .logo-img {
-            max-width: 100%;
-            height: auto;
-            width: 340px; /* Tamanho ideal para destacar o brasão */
-            filter: drop-shadow(0 8px 25px rgba(212, 175, 55, 0.25));
-            margin: 0 auto;
-            display: block;
+            padding: 50px 20px 20px;
             animation: fadeIn 1s ease-in-out;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+
+        header h1 span {
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .search-container {
@@ -357,8 +354,9 @@
                 grid-template-columns: 1fr;
                 gap: 25px;
             }
-            .logo-img {
-                width: 280px;
+            header h1 {
+                font-size: 1.3rem;
+                letter-spacing: 2px;
             }
             .nav-tabs {
                 margin: 0 5px 25px;
@@ -370,9 +368,7 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo-area">
-                <img src="logo.png" alt="6ª Festa dos Caminhoneiros - Monte Carmelo" class="logo-img">
-            </div>
+            <h1>6ª Festa dos Caminhoneiros <span>• Portal de Marketing</span></h1>
         </header>
 
         <div class="search-container">
