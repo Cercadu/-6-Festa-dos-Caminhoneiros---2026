@@ -10,10 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #d4af37; /* Dourado Premium */
-            --secondary: #ff9f00; /* Âmbar / Iluminação Truck */
-            --bg-dark: #0a0a0a; /* Preto Asfalto profundo */
-            --card-bg: #141414; /* Elementos em Grafite Escuro */
+            --primary: #d4af37;
+            --secondary: #ff9f00;
+            --bg-dark: #0a0a0a;
+            --card-bg: #141414;
             --text: #ffffff;
             --text-dim: #aaaaaa;
             --glass: rgba(255, 255, 255, 0.02);
@@ -401,6 +401,12 @@
             try {
                 const response = await fetch(LINK_DO_MEU_SCRIPT);
                 const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('contentArea').innerHTML = `<p style='text-align:center; color:var(--text-dim); padding:40px;'>Erro no Script: ${data.detalhes}</p>`;
+                    return;
+                }
+
                 ASSETS_DATA = data;
                 const categories = Object.keys(data);
                 if (categories.length > 0) {
@@ -451,7 +457,7 @@
             });
 
             if (filteredData.length === 0) {
-                container.innerHTML = "<p style='text-align:center; color:var(--text-dim); padding:60px; font-size:0.95rem;'>Nenhum patrocinador encontrado para esta busca.</p>";
+                container.innerHTML = "<p style='text-align:center; color:var(--text-dim); padding:60px; font-size:0.95rem;'>Nenhum material encontrado para esta categoria ou busca.</p>";
                 return;
             }
 
