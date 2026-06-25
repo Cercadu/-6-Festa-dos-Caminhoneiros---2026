@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>6ª Festa dos Caminhoneiros - Portal de Marketing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4af37; /* Dourado Premium */
+            --secondary: #ff9f00; /* Âmbar / Iluminação Truck */
+            --bg-dark: #0a0a0a; /* Preto Asfalto profundo */
+            --card-bg: #141414; /* Elementos em Grafite Escuro */
+            --text: #ffffff;
+            --text-dim: #aaaaaa;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(214, 175, 55, 0.15);
+            --gold-glow: 0 0 25px rgba(212, 175, 55, 0.25);
+            --black-gradient: linear-gradient(135deg, #141414 0%, #0d0d0d 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(255, 159, 0, 0.03) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 10px;
+            padding-bottom: 140px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .logo-img {
+            max-width: 100%;
+            height: auto;
+            width: 340px; /* Tamanho ideal para destacar o brasão */
+            filter: drop-shadow(0 8px 25px rgba(212, 175, 55, 0.25));
+            margin: 0 auto;
+            display: block;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .search-container {
+            margin: 0 10px 35px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 28px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(15, 15, 15, 0.7);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(15px);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: var(--gold-glow), inset 0 2px 4px rgba(0,0,0,0.5);
+            background: rgba(20, 20, 20, 0.9);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 6px;
+            margin: 0 10px 35px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px 28px;
+            border: none;
+            background: none;
+            color: var(--text-dim);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 40px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #f5d061 0%, #b89324 50%, #8a690f 100%);
+            color: #000000;
+            font-weight: 900;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+            text-shadow: 0 1px 1px rgba(255,255,255,0.2);
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 0 10px;
+        }
+
+        .asset-card {
+            background: var(--black-gradient);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.04);
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .asset-card.ready:hover {
+            transform: translateY(-8px);
+            border-color: rgba(214, 175, 55, 0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .asset-card.selected {
+            border-color: var(--primary);
+            box-shadow: var(--gold-glow);
+        }
+
+        .asset-preview {
+            aspect-ratio: 9/16;
+            background: #000;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .asset-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .asset-card.ready:hover .asset-preview img {
+            transform: scale(1.04);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            padding: 7px 14px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .badge-ready {
+            background: linear-gradient(135deg, #f5d061 0%, #b89324 100%);
+            color: #000;
+        }
+
+        .badge-pending {
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-group {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: rgba(15, 15, 15, 0.5);
+            border-top: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .asset-title {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            text-align: center;
+            display: block;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn-share {
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            width: 100%;
+            transition: all 0.2s ease;
+            background: linear-gradient(135deg, #f5d061 0%, #aa8212 100%);
+            color: #000000;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-share:hover:not(:disabled) {
+            filter: brightness(1.1);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+        }
+
+        .btn-select {
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            transition: all 0.2s ease;
+            background: var(--glass);
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-select:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .btn-select.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-share:active,
+        .btn-select:active {
+            transform: scale(0.97);
+        }
+
+        .selection-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(140px);
+            width: calc(100% - 40px);
+            max-width: 520px;
+            background: #ffffff;
+            padding: 16px 30px;
+            border-radius: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s;
+            color: #000000;
+            font-weight: 800;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        .selection-bar.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .btn-bulk {
+            background: #0a0a0a;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-bulk:hover {
+            background: #141414;
+            color: #fff;
+            border-color: #fff;
+        }
+
+        .loader-container {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(212, 175, 55, 0.08);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .asset-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .logo-img {
+                width: 280px;
+            }
+            .nav-tabs {
+                margin: 0 5px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <img src="logo.png" alt="6ª Festa dos Caminhoneiros - Monte Carmelo" class="logo-img">
+            </div>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar marca ou patrocinador..." oninput="handleSearch()">
+        </div>
+
+        <nav class="nav-tabs" id="mainNav"></nav>
+
+        <main id="contentArea">
+            <div class="loader-container">
+                <div class="loader"></div>
+                <p style="color: var(--text-dim); letter-spacing: 1px; font-size: 0.95rem;">Carregando materiais oficiais...</p>
+            </div>
+        </main>
+
+        <div id="selectionBar" class="selection-bar">
+            <span id="selectionCount">0 artes selecionadas</span>
+            <button class="btn-bulk" onclick="shareSelected()">COMPARTILHAR SELEÇÃO</button>
+        </div>
+    </div>
+
+    <script>
+        const LINK_DO_MEU_SCRIPT = "https://script.google.com/macros/s/AKfycby7J8mVPJ7gkPC4fLdS80HvzSiOcq8OWYHmsG83VRQCihwo0Uih77ygwI2MCSH28-JJ/exec";
+        let ASSETS_DATA = {};
+        let currentTab = '';
+        let selectedIds = new Set();
+        let searchTerm = '';
+
+        async function sincronizarComDrive() {
+            try {
+                const response = await fetch(LINK_DO_MEU_SCRIPT);
+                const data = await response.json();
+                ASSETS_DATA = data;
+                const categories = Object.keys(data);
+                if (categories.length > 0) {
+                    if (!currentTab) currentTab = categories[0];
+                    renderTabs(categories);
+                }
+                render();
+            } catch (e) {
+                document.getElementById('contentArea').innerHTML = "<p style='text-align:center; color:var(--text-dim); padding:40px;'>Não foi possível carregar os materiais de divulgação. Recarregue a página.</p>";
+            }
+        }
+
+        function handleSearch() {
+            searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            render();
+        }
+
+        function renderTabs(categories) {
+            const nav = document.getElementById('mainNav');
+            nav.innerHTML = '';
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${currentTab === cat ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.onclick = () => { currentTab = cat; render(); renderTabs(categories); };
+                nav.appendChild(btn);
+            });
+        }
+
+        function render() {
+            const container = document.getElementById('contentArea');
+            const data = ASSETS_DATA[currentTab] || [];
+
+            let filteredData = data.filter(item =>
+                item.title.toLowerCase().includes(searchTerm)
+            );
+
+            filteredData.sort((a, b) => {
+                const titleA = a.title.trim();
+                const titleB = b.title.trim();
+                const startsWithNumA = /^[0-9]/.test(titleA);
+                const startsWithNumB = /^[0-9]/.test(titleB);
+
+                if (!startsWithNumA && startsWithNumB) return -1;
+                if (startsWithNumA && !startsWithNumB) return 1;
+
+                return titleA.localeCompare(titleB, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            if (filteredData.length === 0) {
+                container.innerHTML = "<p style='text-align:center; color:var(--text-dim); padding:60px; font-size:0.95rem;'>Nenhum patrocinador encontrado para esta busca.</p>";
+                return;
+            }
+
+            let html = `<div class="asset-grid">`;
+            filteredData.forEach(item => {
+                const isSelected = selectedIds.has(item.id);
+                
+                const badge = item.checked 
+                    ? `<div class="status-badge badge-ready">✓ PRONTO</div>`
+                    : `<div class="status-badge badge-pending">⏳ EM PRODUÇÃO</div>`;
+
+                html += `
+                <div class="asset-card ${item.checked ? 'ready' : ''} ${isSelected ? 'selected' : ''}" style="${!item.checked ? 'opacity: 0.55;' : ''}">
+                    <div class="asset-preview" onclick="${item.checked ? `toggleSelect('${item.id}')` : ''}">
+                        ${badge}
+                        ${item.isVideo ? '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:var(--primary); font-size:3.5rem; opacity:0.85; text-shadow:0 4px 15px #000; z-index:1;">▶</div>' : ''}
+                        <img src="${item.url}" alt="Festa dos Caminhoneiros">
+                    </div>
+                    <div class="btn-group">
+                        <span class="asset-title" title="${item.title}">${item.title}</span>
+                        <button class="btn-share" onclick="shareAsset('${item.url}', '${item.title}')" ${!item.checked ? 'disabled style="background: #262626; color: #555; cursor: not-allowed; box-shadow: none;"' : ''}>
+                            ${item.checked ? '📥 Salvar / Compartilhar' : 'Aguardando Arte'}
+                        </button>
+                        <button class="btn-select ${isSelected ? 'active' : ''}" onclick="toggleSelect('${item.id}')" ${!item.checked ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>
+                            ${isSelected ? '✓ Selecionado' : '➕ Selecionar Vários'}
+                        </button>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html + `</div>`;
+        }
+
+        function toggleSelect(id) {
+            if (id) {
+                if (selectedIds.has(id)) selectedIds.delete(id);
+                else selectedIds.add(id);
+            }
+            const bar = document.getElementById('selectionBar');
+            document.getElementById('selectionCount').innerText = selectedIds.size + " artes selecionadas";
+            if (selectedIds.size > 0) bar.classList.add('visible');
+            else bar.classList.remove('visible');
+            render();
+        }
+
+        async function shareAsset(url, title) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const fileName = `${title}.jpg`;
+                const file = new File([blob], fileName, { type: 'image/jpeg' });
+
+                if (navigator.share && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: title
+                    });
+                } else {
+                    baixar(url, title);
+                }
+            } catch (err) { baixar(url, title); }
+        }
+
+        function baixar(url, title = 'festa_caminhoneiros') {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title}.jpg`;
+            a.click();
+        }
+
+        async function shareSelected() {
+            const items = ASSETS_DATA[currentTab].filter(i => selectedIds.has(i.id));
+            if (items.length === 0) return;
+
+            const btn = document.querySelector('.btn-bulk');
+            const originalText = btn.innerText;
+            btn.innerText = "PREPARANDO...";
+            btn.disabled = true;
+
+            try {
+                const files = [];
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    const res = await fetch(item.url);
+                    const blob = await res.blob();
+                    const fileName = `${item.title}.jpg`;
+                    files.push(new File([blob], fileName, { type: 'image/jpeg' }));
+                }
+
+                if (navigator.share && navigator.canShare({ files })) {
+                    await navigator.share({
+                        files: files,
+                        title: 'Materiais Festa dos Caminhoneiros'
+                    });
+                    selectedIds.clear();
+                    toggleSelect(null);
+                } else {
+                    alert("Baixando lote de arquivos...");
+                    for (const item of items) {
+                        baixar(item.url, item.title);
+                        await new Promise(r => setTimeout(r, 400));
+                    }
+                }
+            } catch (err) {
+                alert("Não foi possível processar o compartilhamento múltiplo.");
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', sincronizarComDrive);
+    </script>
+</body>
+
+</html>
