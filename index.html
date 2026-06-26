@@ -474,11 +474,11 @@
                     <div class="asset-preview" onclick="${item.checked ? `toggleSelect('${item.id}')` : ''}">
                         ${badge}
                         ${item.isVideo ? '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:var(--primary); font-size:3.5rem; opacity:0.85; text-shadow:0 4px 15px #000; z-index:1;">▶</div>' : ''}
-                        <img src="${item.url}" alt="Festa dos Caminhoneiros">
+                        <img src="https://drive.google.com/thumbnail?id=${item.id}&sz=w800" alt="Festa dos Caminhoneiros">
                     </div>
                     <div class="btn-group">
                         <span class="asset-title" title="${item.title}">${item.title}</span>
-                        <button class="btn-share" onclick="shareAsset('${item.url}', '${item.title}')" ${!item.checked ? 'disabled style="background: #262626; color: #555; cursor: not-allowed; box-shadow: none;"' : ''}>
+                        <button class="btn-share" onclick="shareAsset('${item.url}', '${item.title}', '${item.id}')" ${!item.checked ? 'disabled style="background: #262626; color: #555; cursor: not-allowed; box-shadow: none;"' : ''}>
                             ${item.checked ? '📥 Salvar / Compartilhar' : 'Aguardando Arte'}
                         </button>
                         <button class="btn-select ${isSelected ? 'active' : ''}" onclick="toggleSelect('${item.id}')" ${!item.checked ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>
@@ -502,29 +502,43 @@
             render();
         }
 
-        async function shareAsset(url, title) {
-            try {
-                const response = await fetch(url);
-                const blob = await response.blob();
-                const fileName = `${title}.jpg`;
-                const file = new File([blob], fileName, { type: 'image/jpeg' });
-
-                if (navigator.share && navigator.canShare({ files: [file] })) {
+        async function shareAsset(url, title, id) {
+            if (navigator.share) {
+                try {
+                    // Tenta baixar a imagem com suporte a CORS para compartilhar o arquivo real
+                    const res = await fetch(`https://lh3.googleusercontent.com/d/${id}`);
+                    const blob = await res.blob();
+                    const file = new File([blob], `${title}.jpg`, { type: blob.type || 'image/jpeg' });
+                    
                     await navigator.share({
                         files: [file],
                         title: title
                     });
-                } else {
-                    baixar(url, title);
+                    return;
+                } catch (err) {
+                    console.log("Erro ao compartilhar arquivo real, tentando compartilhar link...", err);
+                    try {
+                        // Fallback: compartilha o link caso o fetch ou o envio do arquivo falhe
+                        await navigator.share({
+                            title: title,
+                            text: `Baixe a arte "${title}" da Festa dos Caminhoneiros:`,
+                            url: url
+                        });
+                        return;
+                    } catch (e) {}
                 }
-            } catch (err) { baixar(url, title); }
+            }
+            baixar(url, title);
         }
 
         function baixar(url, title = 'festa_caminhoneiros') {
             const a = document.createElement('a');
             a.href = url;
             a.download = `${title}.jpg`;
+            a.target = '_blank';
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
         }
 
         async function shareSelected() {
@@ -537,31 +551,38 @@
             btn.disabled = true;
 
             try {
-                const files = [];
-                for (let i = 0; i < items.length; i++) {
-                    const item = items[i];
-                    const res = await fetch(item.url);
-                    const blob = await res.blob();
-                    const fileName = `${item.title}.jpg`;
-                    files.push(new File([blob], fileName, { type: 'image/jpeg' }));
-                }
+                if (navigator.share) {
+                    const files = [];
+                    // Tentamos baixar cada um dos arquivos em blob para compartilhar os arquivos reais juntos
+                    for (const item of items) {
+                        const res = await fetch(`https://lh3.googleusercontent.com/d/${item.id}`);
+                        const blob = await res.blob();
+                        const extension = item.isVideo ? 'mp4' : 'jpg';
+                        const fileType = item.isVideo ? 'video/mp4' : 'image/jpeg';
+                        files.push(new File([blob], `${item.title}.${extension}`, { type: blob.type || fileType }));
+                    }
 
-                if (navigator.share && navigator.canShare({ files })) {
                     await navigator.share({
                         files: files,
                         title: 'Materiais Festa dos Caminhoneiros'
                     });
                     selectedIds.clear();
                     toggleSelect(null);
-                } else {
+                    return;
+                }
+            } catch (err) {
+                console.log("Falha no compartilhamento nativo de múltiplos arquivos:", err);
+                
+                // Se der erro ou usuário cancelar a partilha, oferece o download em lote
+                if (confirm("Não foi possível enviar os arquivos diretamente. Deseja baixar o lote de arquivos no seu aparelho?")) {
                     alert("Baixando lote de arquivos...");
                     for (const item of items) {
                         baixar(item.url, item.title);
-                        await new Promise(r => setTimeout(r, 400));
+                        await new Promise(r => setTimeout(r, 600));
                     }
+                    selectedIds.clear();
+                    toggleSelect(null);
                 }
-            } catch (err) {
-                alert("Não foi possível processar o compartilhamento múltiplo.");
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
@@ -573,3 +594,4 @@
 </body>
 
 </html>
+s
